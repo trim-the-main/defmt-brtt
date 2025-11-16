@@ -28,8 +28,9 @@ pub(crate) unsafe fn handle() -> &'static Channel {
     // channel (`set_print_channel` + `rprint*`) and that can corrupt defmt log frames.
     // So we declare the RTT control block here and make it impossible to use `rtt-target` together
     // with this crate.
+    #[used]
     #[no_mangle]
-    static mut _SEGGER_RTT: Header = Header {
+    pub static mut _SEGGER_RTT: Header = Header {
         id: *b"SEGGER RTT\0\0\0\0\0\0",
         max_up_channels: 1,
         max_down_channels: 0,
