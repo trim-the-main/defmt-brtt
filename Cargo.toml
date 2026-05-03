@@ -18,6 +18,7 @@ features = ["async-await"]
 defmt = "0.3"
 critical-section = "1.1"
 bbqueue = { version = "0.5.1", features = ["defmt_0_3"], optional = true }
+esp-println = { version = "0.16", optional = true }
 
 [features]
 default = [
@@ -37,3 +38,11 @@ default = [
 bbq = [ "dep:bbqueue" ]
 async-await = [ ]
 rtt = [ ]
+espflash = [ "dep:esp-println" ]
+esp32   = [ "esp-println?/esp32" ]
+esp32c2 = [ "esp-println?/esp32c2" ]
+esp32c3 = [ "esp-println?/esp32c3" ]
+esp32c6 = [ "esp-println?/esp32c6" ]
+esp32h2 = [ "esp-println?/esp32h2" ]
+esp32s2 = [ "esp-println?/esp32s2" ]
+esp32s3 = [ "esp-println?/esp32s3" ]

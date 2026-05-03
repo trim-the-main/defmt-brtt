@@ -15,13 +15,16 @@ mod rtt;
 #[cfg(feature = "rtt")]
 use rtt::handle;
 
+#[cfg(feature = "espflash")]
+mod espflash;
+
 #[cfg(feature = "async-await")]
 mod csec_waker;
 
 use core::sync::atomic::{AtomicBool, Ordering};
 
-#[cfg(not(any(feature = "rtt", feature = "bbq")))]
-compile_error!("You must select at least one of the `rtt` or `bbq` features (or both).");
+#[cfg(not(any(feature = "rtt", feature = "bbq", feature = "espflash")))]
+compile_error!("You must select at least one of the `rtt`, `bbq`, or `espflash` features.");
 
 #[cfg(not(feature = "bbq"))]
 #[macro_export]
@@ -45,6 +48,8 @@ static mut ENCODER: defmt::Encoder = defmt::Encoder::new();
 fn combined_write(_data: &[u8]) {
     #[cfg(feature = "rtt")]
     rtt::do_write(_data);
+    #[cfg(feature = "espflash")]
+    espflash::do_write(_data);
     #[cfg(feature = "bbq")]
     bbq::do_write(_data);
 }
@@ -85,6 +90,10 @@ unsafe impl defmt::Logger for Logger {
 
         // safety: accessing the `static mut` is OK because we have acquired a critical section.
         unsafe { CS_RESTORE = restore };
+
+        // Write espflash frame header before starting the defmt frame
+        #[cfg(feature = "espflash")]
+        espflash::write_frame_header();
 
         // safety: accessing the `static mut` is OK because we have acquired a critical section.
         unsafe { ENCODER.start_frame(combined_write) }

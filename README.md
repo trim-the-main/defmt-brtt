@@ -2,7 +2,7 @@
 
 This crate combines the functionality of `defmt-rtt` and `defmt-bbq` into one single crate.
 
-This allows you to retrieve data over RTT, but also to pump it out over some other transport by reading the data from a `bbqueue`. 
+This allows you to retrieve data over RTT, but also to pump it out over some other transport by reading the data from a `bbqueue`.
 
 Even if that is not a use-case you're interested in, you can also `defmt-brtt`  as an easier way of switching between using RTT and/or BBQueue as your defmt transport.
 
@@ -10,9 +10,12 @@ Even if that is not a use-case you're interested in, you can also `defmt-brtt`  
 
 * `rtt`: activate the RTT transport (works exactly like [`defmt-rtt`](https://docs.rs/defmt-rtt/0.4.0/defmt_rtt/), except for [Buffer Size](#buffer-size)).
 * `bbq`: activate the BBQueue transport (works exactly like [`defmt-bbq`](https://docs.rs/defmt-bbq/0.1.0/defmt_bbq/), except for [Buffer Size](#buffer-size)).
+* `espflash`: activate the esp-println transport (works almost like [`esp-println`](https://docs.espressif.com/projects/rust/esp-println/0.17.0/esp_println/index.html) with `defmt-espflash` feature)
 * `async-await`: add a function to `defmt_brtt::DefmtConsumer` that enables async-waiting for log data.
 
-You must activate at least one of `rtt` and `bbq`.
+You must activate at least one of `rtt`, `espflash` and `bbq`.
+
+When `espflash` feature is set, you must run `espflash monitor` with `--log-format defmt` option.
 
 # Buffer Size
 To configure the buffer size used by `defmt-brtt`, you can set the environment variable `DEFMT_BRTT_BUFFER_SIZE` to the desired size.
